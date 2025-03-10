@@ -183,17 +183,7 @@ class CustomTextFormatter extends FieldFormatterBase {
 To retrieve a module's configuration using Drush, use the config:get command:
 
 ```bash
-drush config:get mymodule.settings
+./vendor/bin/drush config:get mymodule.settings
 ```
 
-Replace mymodule.settings with the configuration name for your module. If you don’t know the configuration name, you can list all configurations:
-
-```bash
-drush config:list
-```
-
-To filter configurations for a specific module:
-
-```bash
-drush config:list | grep mymodule
-```
+<img width="1102" alt="image" src="https://github.com/user-attachments/assets/3ff48d18-6f38-43ad-a943-0473cff0e783" />
