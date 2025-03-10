@@ -113,3 +113,85 @@ Use the drush generate command:
 
 <img width="1024" alt="image" src="https://github.com/user-attachments/assets/2377b0ca-25d0-4560-98c1-842ea697d0ef" />
 
+<img width="535" alt="image" src="https://github.com/user-attachments/assets/8f62d000-d634-4f00-bc51-fb1b5733e5d6" />
+
+---
+
+4. **How to Get a Field Definition Using Code?**
+
+To retrieve a field definition in Drupal programmatically, you can use the following code:
+
+```php
+<?php
+$field_definition = \Drupal::entityTypeManager()
+  ->getStorage('field_storage_config')
+  ->load('node.field_body');
+```
+
+---
+
+5. **Is it Possible to Create Multiple Field Formatters for a Field Type? If So, How?**
+
+Yes, it is possible to create multiple field formatters for a field type. Field formatters in Drupal are plugins, and you can define custom formatters for a specific field type.
+
+To create multiple field formatters, you need to:
+
+- Define a New Formatter Plugin: Implement a new plugin class in your module that extends the FieldFormatterBase class.
+- Alter the Formatter Definition: Define the settings for the formatter, such as options or configuration.
+
+```php
+<?php
+namespace Drupal\mymodule\Plugin\Field\FieldFormatter;
+
+use Drupal\Core\Field\FieldItemListInterface;
+use Drupal\Core\Field\FieldDefinitionInterface;
+use Drupal\field\Plugin\Field\FieldFormatter\FieldFormatterBase;
+use Drupal\field\FieldStorageDefinitionInterface;
+
+/**
+ * Plugin to define a custom formatter for a text field.
+ *
+ * @FieldFormatter(
+ *   id = "custom_text_formatter",
+ *   label = @Translation("Custom Text Formatter"),
+ *   field_types = {"text"},
+ * )
+ */
+class CustomTextFormatter extends FieldFormatterBase {
+
+  /**
+   * {@inheritdoc}
+   */
+  public function viewElements(FieldItemListInterface $items, $langcode) {
+    $elements = [];
+    foreach ($items as $delta => $item) {
+      $elements[$delta] = [
+        '#markup' => '<div class="custom-text">' . $item->value . '</div>',
+      ];
+    }
+    return $elements;
+  }
+}
+```
+
+---
+
+6. **Using drush, how to retrieve a module configuration (settings) ?**
+
+To retrieve a module's configuration using Drush, use the config:get command:
+
+```bash
+drush config:get mymodule.settings
+```
+
+Replace mymodule.settings with the configuration name for your module. If you don’t know the configuration name, you can list all configurations:
+
+```bash
+drush config:list
+```
+
+To filter configurations for a specific module:
+
+```bash
+drush config:list | grep mymodule
+```
