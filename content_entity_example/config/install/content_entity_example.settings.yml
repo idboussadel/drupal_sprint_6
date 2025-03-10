@@ -1,0 +1,3 @@
+example_setting: 'Hello content entity example'
+enabled: true
+notification_email: 'a.idboussadel@void.fr'

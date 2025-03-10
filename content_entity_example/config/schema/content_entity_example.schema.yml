@@ -1,0 +1,13 @@
+content_entity_example.settings:
+  type: config_object
+  label: 'Content Entity Example Settings'
+  mapping:
+    example_setting:
+      type: string
+      label: 'Example Setting'
+    enabled:
+      type: boolean
+      label: 'Enable Feature'
+    notification_email:
+      type: string
+      label: 'Notification Email'

@@ -1,0 +1,7 @@
+entity.product.settings:
+  path: 'admin/structure/product'
+  defaults:
+    _form: '\Drupal\product\Form\ProductSettingsForm'
+    _title: 'Product'
+  requirements:
+    _permission: 'administer product'

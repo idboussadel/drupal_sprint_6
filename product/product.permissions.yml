@@ -1,0 +1,11 @@
+administer product:
+  title: 'Administer products'
+  restrict access: true
+view product:
+  title: 'View product'
+edit product:
+  title: 'Edit product'
+delete product:
+  title: 'Delete product'
+create product:
+  title: 'Create product'

@@ -68,6 +68,8 @@ class PasswordPolicyConstraintValidator extends ConstraintValidator implements C
 
 <img width="1440" alt="image" src="https://github.com/user-attachments/assets/1bc5fcb3-d3d4-4fe2-88f2-56cab0d81bbb" />
 
+---
+
 2. **What is AccessResult and how does it work ?**
 
 2. What is AccessResult and How Does It Work?
@@ -91,3 +93,23 @@ function mymodule_access_check($account) {
   return AccessResult::forbidden();
 }
 ```
+
+---
+
+3. ** Creating a custom entity involves a lot of moving parts and boilerplate code, how do you quickly generate and scafold a new entity codebase ?**
+
+Using Drush:
+Install Drush if not already installed:
+
+```bash
+composer require drush/drush
+```
+
+Use the drush generate command:
+
+```bash
+./vendor/bin/drush generate entity:content
+```
+
+<img width="1024" alt="image" src="https://github.com/user-attachments/assets/2377b0ca-25d0-4560-98c1-842ea697d0ef" />
+
