@@ -1,0 +1,15 @@
+content_entity_example.contact_settings:
+  path: '/admin/structure/content_entity_example_contact_settings'
+  defaults:
+    _form: '\Drupal\content_entity_example\Form\ContactSettingsForm'
+    _title: 'Contact settings'
+  requirements:
+    _permission: 'administer contact entity'
+
+content_entity_example.contact_add:
+  path: '/content_entity_example_contact/add'
+  defaults:
+    _entity_form: content_entity_example_contact.add
+    _title: 'Add contact'
+  requirements:
+    _entity_create_access: 'content_entity_example_contact'

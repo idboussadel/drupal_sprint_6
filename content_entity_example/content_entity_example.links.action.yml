@@ -1,0 +1,8 @@
+content_entity_example.contact_add:
+  # Which route will be called by the link
+  route_name: content_entity_example.contact_add
+  title: 'Add contact'
+
+  appears_on:
+    - entity.content_entity_example_contact.collection
+    - entity.content_entity_example_contact.canonical
