@@ -249,3 +249,36 @@ To retrieve a module's configuration using Drush, use the config:get command:
 ```
 
 <img width="1102" alt="image" src="https://github.com/user-attachments/assets/3ff48d18-6f38-43ad-a943-0473cff0e783" />
+
+Using a custom module :
+( 🆘 if it doesnt work make sure to uninstall and install module again to config to take place )
+
+`config/install/content_entity_example.settings.yml` :
+
+```yaml
+example_setting: 'Hello content entity example'
+enabled: true
+notification_email: 'a.idboussadel@void.fr'
+```
+
+`config/schema/content_entity_example.schema.yml`:
+
+```yaml
+content_entity_example.settings:
+  type: config_object
+  label: 'Content Entity Example Settings'
+  mapping:
+    example_setting:
+      type: string
+      label: 'Example Setting'
+    enabled:
+      type: boolean
+      label: 'Enable Feature'
+    notification_email:
+      type: string
+      label: 'Notification Email'
+```
+
+<img width="879" alt="image" src="https://github.com/user-attachments/assets/f098441f-16c2-4956-9213-69c3fc35fec3" />
+
+
