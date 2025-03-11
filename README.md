@@ -1,6 +1,6 @@
 # Sprint 6 - Drupal 
 
-## Day 1: Work with Data (Entity & Field API, Configuration Entities)
+### Day 1: Work with Data (Entity & Field API, Configuration Entities)
 
 1. **Using hook_entity_base_field_info_alter alter user entity type and add a constraint to the pass field**
 
@@ -134,7 +134,6 @@ class PasswordPolicyConstraintValidator extends ConstraintValidator
 
 2. **What is AccessResult and how does it work ?**
 
-2. What is AccessResult and How Does It Work?
 AccessResult is a class in Drupal that represents the outcome of a permission check. It is used to handle access control in Drupal. When you check if a user can access a resource (like a page, content, or an action), you return an AccessResult object.
 
 -  `AccessResult::allowed()` : Indicates that access is granted.
@@ -158,7 +157,7 @@ function mymodule_access_check($account) {
 
 ---
 
-3. ** Creating a custom entity involves a lot of moving parts and boilerplate code, how do you quickly generate and scafold a new entity codebase ?**
+3. **Creating a custom entity involves a lot of moving parts and boilerplate code, how do you quickly generate and scafold a new entity codebase ?**
 
 Using Drush:
 Install Drush if not already installed:
