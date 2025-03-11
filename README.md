@@ -308,7 +308,7 @@ function MYMODULE_entity_base_field_info(\Drupal\Core\Entity\EntityTypeInterface
       ->setDescription(t('A custom base field for nodes.'))
       ->setDisplayOptions('form', [
         'type' => 'string_textfield',
-        'weight' => 10,
+        'weight' => 0,
       ])
       ->setDisplayConfigurable('form', TRUE)
       ->setDisplayConfigurable('view', TRUE);
@@ -317,6 +317,9 @@ function MYMODULE_entity_base_field_info(\Drupal\Core\Entity\EntityTypeInterface
   return $fields;
 }
 ```
+
+<img width="1440" alt="image" src="https://github.com/user-attachments/assets/aa883651-cc0b-44c3-84fe-c4c231b7d88c" />
+
 
 ---
 
@@ -483,3 +486,32 @@ function mymodule_theme_suggestions_alter(array &$suggestions, array $variables,
   }
 }
 ```
+
+- `user--full.html.twig`
+```twig
+{#
+/**
+ * @file
+ * Custom template for user full view mode.
+ */
+#}
+<div class="user-full">
+  <p>This is the custom user full template.</p>
+  <div>{{ content }}</div>
+</div>
+```
+
+- `user--teaser.html.twig`
+```twig
+{#
+/**
+ * @file
+ * Custom template for user teaser view mode.
+ */
+#}
+<div class="user-teaser">
+  <p>This is the custom user teaser template.</p>
+</div>
+```
+
+<img width="1440" alt="image" src="https://github.com/user-attachments/assets/29058e2c-e9b0-4eb5-ae73-20006d1f2ce3" />

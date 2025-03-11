@@ -15,6 +15,28 @@ function content_entity_example_entity_base_field_info_alter(&$fields, EntityTyp
 }
 
 /**
+ * Implements hook_entity_base_field_info().
+ */
+function content_entity_example_entity_base_field_info(\Drupal\Core\Entity\EntityTypeInterface $entity_type)
+{
+    $fields = [];
+
+    if ($entity_type->id() === 'node') {
+        $fields['my_custom_field'] = \Drupal\Core\Field\BaseFieldDefinition::create('string')
+            ->setLabel(t('My Custom Field'))
+            ->setDescription(t('A custom base field for nodes.'))
+            ->setDisplayOptions('form', [
+                'type' => 'string_textfield',
+                'weight' => 0,
+            ])
+            ->setDisplayConfigurable('form', TRUE)
+            ->setDisplayConfigurable('view', TRUE);
+    }
+
+    return $fields;
+}
+
+/**
  * Implements hook_theme().
  */
 function content_entity_example_theme()
@@ -22,6 +44,14 @@ function content_entity_example_theme()
     return [
         'node__article__custom' => [
             'template' => 'node--article--custom',
+            'base hook' => 'node',
+        ],
+        'user__full' => [
+            'template' => 'user--full',
+            'base hook' => 'node',
+        ],
+        'user__teaser' => [
+            'template' => 'user--teaser',
             'base hook' => 'node',
         ],
     ];
@@ -32,7 +62,6 @@ function content_entity_example_theme()
  */
 function content_entity_example_theme_suggestions_node_alter(array &$suggestions, array $variables)
 {
-
     if (isset($variables['elements']['#node']) && $variables['elements']['#node'] instanceof \Drupal\node\NodeInterface) {
         if ($variables['elements']['#node']->bundle() == 'article') {
             $suggestions[] = 'node__article__custom';
@@ -48,5 +77,18 @@ function content_entity_example_node_presave(\Drupal\Core\Entity\EntityInterface
     if ($entity->bundle() === 'article' && $entity->isNew()) {
         $title = $entity->getTitle();
         $entity->setTitle('HEY-' . $title);
+    }
+}
+
+
+/**
+ * Implements hook_theme_suggestions_alter().
+ */
+function content_entity_example_theme_suggestions_alter(array &$suggestions, array $variables, $hook)
+{
+    if ($hook === 'user' && isset($variables['elements']['#view_mode'])) {
+        $view_mode = $variables['elements']['#view_mode'];
+        dump('user__' . $view_mode);
+        $suggestions[] = 'user__' . $view_mode;
     }
 }
