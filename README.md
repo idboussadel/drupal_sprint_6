@@ -1,6 +1,6 @@
 # Sprint 6 - Drupal 
 
-## Table of Contents
+### Table of Contents
 
 - [Day 1: Work with Data](#day-1-work-with-data-entity--field-api-configuration-entities)
 - [Day 2: Work with Hooks](#day-2-work-with-hooks)
