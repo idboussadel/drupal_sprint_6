@@ -3,9 +3,6 @@ type: module
 description: 'Demonstrates how to create a content entity.'
 core_version_requirement: ^10 || ^111
 package: 'Custom'
-dependencies:
-  - drupal:options
-  - drupal:user
 config:
   install:
     - content_entity_example.settings

@@ -68,6 +68,68 @@ class PasswordPolicyConstraintValidator extends ConstraintValidator implements C
 
 <img width="1440" alt="image" src="https://github.com/user-attachments/assets/1bc5fcb3-d3d4-4fe2-88f2-56cab0d81bbb" />
 
+you can also have custom validation :
+
+```php
+<?php
+
+namespace Drupal\password_constraint\Plugin\Validation\Constraint;
+
+use Symfony\Component\Validator\Constraint;
+use Symfony\Component\Validator\ConstraintValidator;
+
+/**
+ * Validates the Password Policy Constraint.
+ */
+class PasswordPolicyConstraintValidator extends ConstraintValidator
+{
+    /**
+     * Validates password based on custom policy rules.
+     */
+    public function validate($value, Constraint $constraint)
+    {
+        if (empty($value)) {
+            return;
+        }
+
+        if ($value instanceof \Drupal\Core\Field\FieldItemListInterface) {
+            $value = $value->value;
+        }
+
+        $errors = [];
+
+        if (!preg_match('/[\W_]/', $value)) {
+            $errors[] = "Password must contain at least one special character.";
+        }
+
+        if (!preg_match('/[A-Z]/', $value)) {
+            $errors[] = "Password must contain at least one uppercase letter.";
+        }
+
+        if (!preg_match('/[0-9]/', $value)) {
+            $errors[] = "Password must contain at least one number.";
+        }
+
+        if (!empty($errors)) {
+            $list_items = '';
+            foreach ($errors as $error) {
+                $list_items .= str_replace('%item', $error, $constraint->itemFormat);
+            }
+
+            $formatted_message = $constraint->message . $constraint->listOpen . $list_items . $constraint->listClose;
+
+            $this->context->buildViolation($formatted_message)
+                ->setInvalidValue($value)
+                ->addViolation();
+        }
+    }
+}
+
+```
+
+<img width="1440" alt="image" src="https://github.com/user-attachments/assets/5e744eca-f9eb-49b9-8499-36ecfacb0d59" />
+
+
 ---
 
 2. **What is AccessResult and how does it work ?**
