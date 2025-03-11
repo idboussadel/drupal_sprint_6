@@ -280,4 +280,159 @@ content_entity_example.settings:
 
 <img width="879" alt="image" src="https://github.com/user-attachments/assets/f098441f-16c2-4956-9213-69c3fc35fec3" />
 
+---
 
+### Day 2: Work with Hooks
+
+1. **How do you add a new field base to an existing entity type using hook_entity_base_field_info?**
+
+To add a new base field to an existing entity type, implement hook_entity_base_field_info() in your custom module.
+
+```php
+/**
+ * Implements hook_entity_base_field_info().
+ */
+function MYMODULE_entity_base_field_info(\Drupal\Core\Entity\EntityTypeInterface $entity_type) {
+  $fields = [];
+
+  if ($entity_type->id() === 'node') {
+    $fields['my_custom_field'] = \Drupal\Core\Field\BaseFieldDefinition::create('string')
+      ->setLabel(t('My Custom Field'))
+      ->setDescription(t('A custom base field for nodes.'))
+      ->setDisplayOptions('form', [
+        'type' => 'string_textfield',
+        'weight' => 10,
+      ])
+      ->setDisplayConfigurable('form', TRUE)
+      ->setDisplayConfigurable('view', TRUE);
+  }
+
+  return $fields;
+}
+```
+
+2. **What is the role of hook_update_n?**
+
+Suppose you have a custom module called my_module, and in version 1.0, you didn't have a field for "subtitle" on your article content type. In version 1.1, you decide to add a "subtitle" field. You need to ensure that all existing sites using your module get this new field when they update.
+🆘 hook_update_N() is defined in your module's `.install` file. 
+
+```php
+<?php
+
+/**
+ * Implements hook_update_N().
+ * Add a new "subtitle" field to the article content type.
+ */
+function my_module_update_8001() {
+  // Create the field storage.
+  \Drupal::entityDefinitionUpdateManager()->installFieldStorageDefinition(
+    'field_subtitle',
+    'node',
+    'my_module',
+    [
+      'type' => 'string',
+      'label' => 'Subtitle',
+    ]
+  );
+
+  // Add the field to the "article" content type.
+  $field_config = \Drupal\field\Entity\FieldConfig::create([
+    'field_name' => 'field_subtitle',
+    'entity_type' => 'node',
+    'bundle' => 'article',
+    'label' => 'Subtitle',
+  ]);
+  $field_config->save();
+}
+```
+
+3. **What is the role of hook_install?**
+
+`hook_install` is used to perform actions when a module is installed. This is where you can set up default configurations, create database tables, or initialize module-specific settings.
+
+```php
+<?php
+
+/**
+ * Implements hook_install().
+ */
+function MYMODULE_install() {
+  // Create a default role.
+  $role = \Drupal\user\Entity\Role::create([
+    'id' => 'custom_role',
+    'label' => 'Custom Role',
+  ]);
+  $role->save();
+}
+```
+
+4. **How would you prefix all your newly created nodes (type: article) with HEY- using hook_ENTITY_TYPE_presave?**
+
+To prefix all newly created nodes of type "article" with "HEY-", implement `hook_ENTITY_TYPE_presave` for nodes.
+
+```php
+<?php
+
+/**
+ * Implements hook_ENTITY_TYPE_presave().
+ */
+function MYMODULE_node_presave(\Drupal\Core\Entity\EntityInterface $entity) {
+  if ($entity->bundle() === 'article' && $entity->isNew()) {
+    $title = $entity->getTitle();
+    $entity->setTitle('HEY-' . $title);
+  }
+}
+```
+
+5. **What is the role of $entity->original?**
+
+`$entity->original` holds the original version of the entity before it was modified. This is useful for comparing changes between the original and the updated entity.
+
+```php
+<?php
+
+function MYMODULE_node_presave(\Drupal\Core\Entity\EntityInterface $entity) {
+  if ($entity->bundle() === 'article') {
+    $original_title = $entity->original->getTitle();
+    $new_title = $entity->getTitle();
+    if ($original_title !== $new_title) {
+      // Do something if the title has changed.
+    }
+  }
+}
+```
+
+6. **How can you override a Theme Hook provided by another module?**
+
+To override a theme hook provided by another module, you can implement `hook_theme_suggestions_HOOK_alter` to add your own theme suggestions.
+
+```php
+<?php
+
+/**
+ * Implements hook_theme_suggestions_HOOK_alter() for node templates.
+ */
+function mymodule_theme_suggestions_node_alter(array &$suggestions, array $variables) {
+  if ($variables['node']->bundle() == 'article') {
+    $suggestions[] = 'node__article__custom';
+  }
+}
+```
+
+7. **Using hook_theme_suggestions_alter how can you add a new theme suggestion for $hook === 'user' based on the view mode?**
+
+To add a new theme suggestion for the 'user' hook based on the view mode, implement `hook_theme_suggestions_alter`.
+
+```php
+<?php
+
+/**
+ * Implements hook_theme_suggestions_alter().
+ */
+function mymodule_theme_suggestions_alter(array &$suggestions, array $variables, $hook) {
+  if ($hook === 'user' && isset($variables['elements']['#view_mode'])) {
+    $view_mode = $variables['elements']['#view_mode'];
+    $suggestions[] = 'user__' . $view_mode;
+  }
+}
+```
