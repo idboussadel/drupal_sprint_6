@@ -5,11 +5,48 @@ use Drupal\Core\Entity\EntityTypeInterface;
 /**
  * Implements hook_entity_base_field_info_alter().
  */
-function mymodule_entity_base_field_info_alter(&$fields, EntityTypeInterface $entity_type)
+function content_entity_example_entity_base_field_info_alter(&$fields, EntityTypeInterface $entity_type)
 {
     if ($entity_type->id() === 'user') {
         if (isset($fields['pass'])) {
             $fields['pass']->addConstraint('PasswordPolicyConstraint');
         }
+    }
+}
+
+/**
+ * Implements hook_theme().
+ */
+function content_entity_example_theme()
+{
+    return [
+        'node__article__custom' => [
+            'template' => 'node--article--custom',
+            'base hook' => 'node',
+        ],
+    ];
+}
+
+/**
+ * Implements hook_theme_suggestions_HOOK_alter() for node templates.
+ */
+function content_entity_example_theme_suggestions_node_alter(array &$suggestions, array $variables)
+{
+
+    if (isset($variables['elements']['#node']) && $variables['elements']['#node'] instanceof \Drupal\node\NodeInterface) {
+        if ($variables['elements']['#node']->bundle() == 'article') {
+            $suggestions[] = 'node__article__custom';
+        }
+    }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_presave().
+ */
+function content_entity_example_node_presave(\Drupal\Core\Entity\EntityInterface $entity)
+{
+    if ($entity->bundle() === 'article' && $entity->isNew()) {
+        $title = $entity->getTitle();
+        $entity->setTitle('HEY-' . $title);
     }
 }

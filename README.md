@@ -311,6 +311,8 @@ function MYMODULE_entity_base_field_info(\Drupal\Core\Entity\EntityTypeInterface
 }
 ```
 
+---
+
 2. **What is the role of hook_update_n?**
 
 Suppose you have a custom module called my_module, and in version 1.0, you didn't have a field for "subtitle" on your article content type. In version 1.1, you decide to add a "subtitle" field. You need to ensure that all existing sites using your module get this new field when they update.
@@ -346,6 +348,8 @@ function my_module_update_8001() {
 }
 ```
 
+---
+
 3. **What is the role of hook_install?**
 
 `hook_install` is used to perform actions when a module is installed. This is where you can set up default configurations, create database tables, or initialize module-specific settings.
@@ -366,6 +370,8 @@ function MYMODULE_install() {
 }
 ```
 
+---
+
 4. **How would you prefix all your newly created nodes (type: article) with HEY- using hook_ENTITY_TYPE_presave?**
 
 To prefix all newly created nodes of type "article" with "HEY-", implement `hook_ENTITY_TYPE_presave` for nodes.
@@ -383,6 +389,10 @@ function MYMODULE_node_presave(\Drupal\Core\Entity\EntityInterface $entity) {
   }
 }
 ```
+
+<img width="1440" alt="image" src="https://github.com/user-attachments/assets/3974bcbc-5f8b-45a5-b61c-336f60a57d7f" />
+
+---
 
 5. **What is the role of $entity->original?**
 
@@ -402,6 +412,8 @@ function MYMODULE_node_presave(\Drupal\Core\Entity\EntityInterface $entity) {
 }
 ```
 
+---
+
 6. **How can you override a Theme Hook provided by another module?**
 
 To override a theme hook provided by another module, you can implement `hook_theme_suggestions_HOOK_alter` to add your own theme suggestions.
@@ -412,12 +424,36 @@ To override a theme hook provided by another module, you can implement `hook_the
 /**
  * Implements hook_theme_suggestions_HOOK_alter() for node templates.
  */
-function mymodule_theme_suggestions_node_alter(array &$suggestions, array $variables) {
-  if ($variables['node']->bundle() == 'article') {
-    $suggestions[] = 'node__article__custom';
-  }
+function content_entity_example_theme_suggestions_node_alter(array &$suggestions, array $variables)
+{
+
+    if (isset($variables['elements']['#node']) && $variables['elements']['#node'] instanceof \Drupal\node\NodeInterface) {
+        if ($variables['elements']['#node']->bundle() == 'article') {
+            $suggestions[] = 'node__article__custom';
+        }
+    }
 }
 ```
+
+```twig
+{#
+/**
+ * @file
+ * Custom template for article nodes.
+ */
+#}
+{{ dump() }}
+
+<article>
+  <p>My custom node artical ( override ) template</p>
+  <div>{{ content }}</div>
+</article>
+```
+
+<img width="1440" alt="image" src="https://github.com/user-attachments/assets/0fe588b6-afb3-41c7-90b2-6bf7bca1b533" />
+
+
+---
 
 7. **Using hook_theme_suggestions_alter how can you add a new theme suggestion for $hook === 'user' based on the view mode?**
 
