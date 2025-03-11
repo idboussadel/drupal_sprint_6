@@ -1,5 +1,12 @@
 # Sprint 6 - Drupal 
 
+## Table of Contents
+
+- [Day 1: Work with Data](#day-1-work-with-data-entity--field-api-configuration-entities)
+- [Day 2: Work with Hooks](#day-2-work-with-hooks)
+
+---  
+
 ### Day 1: Work with Data (Entity & Field API, Configuration Entities)
 
 1. **Using hook_entity_base_field_info_alter alter user entity type and add a constraint to the pass field**
@@ -325,28 +332,32 @@ Suppose you have a custom module called my_module, and in version 1.0, you didn'
  * Implements hook_update_N().
  * Add a new "subtitle" field to the article content type.
  */
-function my_module_update_8001() {
-  // Create the field storage.
-  \Drupal::entityDefinitionUpdateManager()->installFieldStorageDefinition(
-    'field_subtitle',
-    'node',
-    'my_module',
-    [
-      'type' => 'string',
-      'label' => 'Subtitle',
-    ]
-  );
+function content_entity_example_update_8001()
+{
+    // Create the field storage definition.
+    $field_storage = \Drupal\field\Entity\FieldStorageConfig::create([
+        'field_name' => 'field_subtitle',
+        'entity_type' => 'node',
+        'type' => 'string',
+        'settings' => [],
+    ]);
+    $field_storage->save();
 
-  // Add the field to the "article" content type.
-  $field_config = \Drupal\field\Entity\FieldConfig::create([
-    'field_name' => 'field_subtitle',
-    'entity_type' => 'node',
-    'bundle' => 'article',
-    'label' => 'Subtitle',
-  ]);
-  $field_config->save();
+    // Add the field to the "article" content type.
+    $field_config = \Drupal\field\Entity\FieldConfig::create([
+        'field_name' => 'field_subtitle',
+        'entity_type' => 'node',
+        'bundle' => 'article',
+        'label' => 'Subtitle',
+    ]);
+    $field_config->save();
 }
+
 ```
+
+<img width="995" alt="image" src="https://github.com/user-attachments/assets/6c71e8bf-52a1-4b4d-9e6b-55bc2e3115b5" />
+
+<img width="1438" alt="image" src="https://github.com/user-attachments/assets/e47a3c63-b51a-445a-a776-26408ca43264" />
 
 ---
 

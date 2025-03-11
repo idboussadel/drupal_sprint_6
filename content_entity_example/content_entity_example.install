@@ -1,0 +1,26 @@
+<?php
+
+/**
+ * Implements hook_update_N().
+ * Add a new "subtitle" field to the article content type.
+ */
+function content_entity_example_update_8001()
+{
+    // Create the field storage definition.
+    $field_storage = \Drupal\field\Entity\FieldStorageConfig::create([
+        'field_name' => 'field_subtitle',
+        'entity_type' => 'node',
+        'type' => 'string',
+        'settings' => [],
+    ]);
+    $field_storage->save();
+
+    // Add the field to the "article" content type.
+    $field_config = \Drupal\field\Entity\FieldConfig::create([
+        'field_name' => 'field_subtitle',
+        'entity_type' => 'node',
+        'bundle' => 'article',
+        'label' => 'Subtitle',
+    ]);
+    $field_config->save();
+}
